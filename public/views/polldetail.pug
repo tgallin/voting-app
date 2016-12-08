@@ -1,0 +1,39 @@
+doctype html
+html(lang='en')
+  include includes/head.pug
+  body
+    include includes/navbar.pug
+    div(class='container')
+      div(class='well polldetail-well')
+        div(class='row')
+          div(class='col-sm-4')
+          div(class='col-sm-8')
+            canvas(id='myChart' width='200' height='200')
+    include includes/footer.pug
+    script(src='/public/js/Chart.min.js')
+    script.
+      var ctx = document.getElementById("myChart");
+      var data = {
+          labels: [
+              "Red",
+              "Blue",
+              "Yellow"
+          ],
+          datasets: [{
+              data: [300, 50, 100],
+              backgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+                  "#FFCE56"
+              ],
+              hoverBackgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+                  "#FFCE56"
+              ]
+          }]
+      };
+      var myDoughnutChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: data
+      });

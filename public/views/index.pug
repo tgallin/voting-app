@@ -1,0 +1,12 @@
+doctype html
+html(lang='en')
+  include includes/head.pug
+  body
+    include includes/navbar.pug
+    div(class='jumbotron')
+      div(class='container')
+        h1 Voting app
+        p You can see results of existing polls and vote. When signed-in you can also create your own polls and share it with your friends.
+        p
+          a(class='btn btn-primary btn-lg' href='/dashboard' role='button') See polls &raquo;
+    include includes/footer.pug

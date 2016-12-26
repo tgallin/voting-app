@@ -1,0 +1,14 @@
+div(id='pollsList')
+  h2(id='pollsTitle' class='sub-header') All polls
+  div(id='noPolls')
+  div(class='table-responsive')
+    form(id='userInfo')
+      input(type='hidden' id='userId' name='userId' value= userId)
+    table(class='table table-striped table-hover')
+      thead
+        tr
+          th Question
+          th Created
+          if loggedIn
+            th Remove
+      tbody(id='polls')

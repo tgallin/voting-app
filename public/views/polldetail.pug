@@ -5,35 +5,34 @@ html(lang='en')
     include includes/navbar.pug
     div(class='container')
       div(class='well polldetail-well')
-        div(class='row')
-          div(class='col-sm-4')
-          div(class='col-sm-8')
-            canvas(id='myChart' width='200' height='200')
+        div(id='notFound') Sorry, the poll you are looking for doesn't exist any more.
+        div(id'pollDetails')
+          div(class='row')
+            div(class='col-sm-12')
+              a(href='/dashboard') Back to list of polls
+          div(class='row')
+            div(class='col-sm-6')
+              h1(id='question')
+              form(method='post' id='voteForm' data-toggle='validator')
+                input(type='hidden' id='pollId' name='pollId' value= pollId)
+                div(class='form-group')
+                  select(id='options' name='options' class='form-control')
+                button(type='button' class='btn btn-success' id='voteBtn') Vote
+                if loggedIn
+                  div(class='form-group new-option-group')
+                    label(for='newOption') Add a new option
+                    input(type='text' class='form-control' id='newOption' name='newOption' placeholder='Another possible option' required)
+                    div(class='help-block with-errors')
+                  button(type='button' id='addOptionBtn' class='btn btn-default') Add option
+            div(class='col-sm-6')
+              div(id='noVote') No one has voted yet !
+              canvas(id='pollChart' width='200' height='200')
+          if loggedIn
+            div(class='row')
+              div(class='col-sm-12 text-center')
+                button(class='btn btn-default')
+                  a(id='tweet-quote' target='_blank' href='https://twitter.com/intent/tweet')
+                    i(class='fa fa-twitter fa-lg' aria-hidden='true')
     include includes/footer.pug
     script(src='/public/js/Chart.min.js')
-    script.
-      var ctx = document.getElementById("myChart");
-      var data = {
-          labels: [
-              "Red",
-              "Blue",
-              "Yellow"
-          ],
-          datasets: [{
-              data: [300, 50, 100],
-              backgroundColor: [
-                  "#FF6384",
-                  "#36A2EB",
-                  "#FFCE56"
-              ],
-              hoverBackgroundColor: [
-                  "#FF6384",
-                  "#36A2EB",
-                  "#FFCE56"
-              ]
-          }]
-      };
-      var myDoughnutChart = new Chart(ctx, {
-          type: 'doughnut',
-          data: data
-      });
+    script(type='text/javascript' src='/controllers/pollDetailController.client.js')

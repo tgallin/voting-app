@@ -1,9 +1,9 @@
 'use strict';
 
 var path = process.cwd();
-var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
+var PollHandler = require(path + '/app/controllers/pollHandler.server.js');
 
-module.exports = function(app, passport) {
+module.exports = function(app, passport, urlencodedParser) {
 
 	function isLoggedIn(req, res, next) {
 		if (req.isAuthenticated()) {
@@ -14,7 +14,7 @@ module.exports = function(app, passport) {
 		}
 	}
 
-	var clickHandler = new ClickHandler();
+	var pollHandler = new PollHandler();
 
 	app.route('/')
 		.get(function(req, res) {
@@ -36,15 +36,17 @@ module.exports = function(app, passport) {
 		.get(function(req, res) {
 			res.render('dashboard', {
 				loggedIn: req.isAuthenticated(),
+				userId: req.user ? req.user.id : "",
 				title: 'Voting app - dashboard'
 			});
 		});
 
-	app.route('/polldetail')
+	app.route('/polldetail/:id')
 		.get(function(req, res) {
 			res.render('polldetail', {
 				loggedIn: req.isAuthenticated(),
-				title: 'Voting app - poll detail'
+				title: 'Voting app - poll detail',
+				pollId: req.params.id
 			});
 		});
 
@@ -63,8 +65,21 @@ module.exports = function(app, passport) {
 			failureRedirect: '/login'
 		}));
 
-	app.route('/api/:id/clicks')
-		.get(isLoggedIn, clickHandler.getClicks)
-		.post(isLoggedIn, clickHandler.addClick)
-		.delete(isLoggedIn, clickHandler.resetClicks);
+	app.route('/api/allpolls').get(pollHandler.getAllPolls);
+
+	app.route('/api/mypolls').get(isLoggedIn, pollHandler.getMyPolls);
+
+	app.route('/api/newpoll')
+		.post(isLoggedIn, urlencodedParser, pollHandler.addPoll, function(req, res) {
+			res.redirect('/polldetail/' + req.pollId);
+		});
+
+	app.route('/api/addOption').post(isLoggedIn, urlencodedParser, pollHandler.addOption);
+
+	app.route('/api/vote').post(urlencodedParser, pollHandler.vote);
+
+	app.route('/api/polldetail/:id').get(pollHandler.getPoll);
+
+	app.route('/api/removepoll/:id').get(isLoggedIn, urlencodedParser, pollHandler.deletePoll);
+
 };

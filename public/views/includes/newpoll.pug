@@ -1,0 +1,18 @@
+div(id='newPollDiv')
+  h2(class='sub-header') New poll
+  form(action='/api/newpoll' id='newPollForm' method='post' data-toggle='validator')
+    div(class='form-group')
+      label(for='question') Question
+      input(type='text' class='form-control' id='question' name='question' placeholder='Type in the question you want to ask' required)
+      div(class='help-block with-errors')
+    label Options
+    div(class='form-group')
+      input(type='text' class='form-control pollOption' id='option1' name='option1' placeholder='one possible option' required)
+      div(class='help-block with-errors')
+    div(class='form-group')
+      input(type='text' class='form-control pollOption' id='option2' name='option2' placeholder='another possible option' required)
+      div(class='help-block with-errors')
+    div(class='form-group')
+      button(type='button' id='addOption' class='btn btn-default') Add option
+    button(type='submit' class='btn btn-success') Submit
+  form
